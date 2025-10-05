@@ -1,5 +1,7 @@
 # 🧬 BioinfTools 
-Bioinformatics tools for working with nucleic acid sequences
+__Bioinformatics tools for working with nucleic acid sequences__
+
+Performs basic operations with nucleic acid sequences and FastQC analysis, allows checking for sequence validity
 
 __Author: [Elizaveta Salnikova](https://github.com/lvsea00)__
 
