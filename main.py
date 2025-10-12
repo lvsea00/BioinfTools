@@ -1,7 +1,7 @@
 from typing import Union
 from modules.seq_validation import is_nucleic_acid, length_check
 from modules.dna_rna_tools import transcribe, reverse, complement, reverse_complement
-from modules.fastqc_tools import count_gc, mean_quality
+from modules.fastqc_tools import check_gc_count, check_len, check_quality, fastq_to_dict, save_filtered
 
 
 def run_dna_rna_tools(*args) -> Union[list, str]:
@@ -21,25 +21,30 @@ def run_dna_rna_tools(*args) -> Union[list, str]:
     return length_check(result)
 
 
-def filter_fastq(seqs: dict[str, tuple],
+def filter_fastq(input_fastq: str,
+                 output_fastq: str,
                  gc_bounds: Union[tuple, float] = (0, 100),
                  length_bounds: Union[tuple, int] = (0, 2**32),
-                 quality_threshold: int = 0) -> dict:
+                 quality_threshold: int = 0) -> str:
     """
     Filters reads based on QC.
-    Returns dict with reads that match all given conditions
+
+    Args:
+        input_fastq (str): Absolute path to fastq file with unfiltered sequences.
+        output_fastq (str): Name of fastq file with filtered sequences.
+        gc_bounds (tuple, float): GC percentage bounds.
+        length_bounds (tuple, int): Read length bounds.
+        quality_threshold (int): Min quality threshold.
+
+    Returns:
+        str: Program work result information.
+
     """
-    qc_seqs = dict()
-    for key, value in seqs.items():
-        if type(gc_bounds) is tuple:
-            gc_bool = gc_bounds[0] <= count_gc(value[0]) <= gc_bounds[1]
-        else:
-            gc_bool = count_gc(value[0]) < gc_bounds
-        if type(length_bounds) is tuple:
-            len_bool = length_bounds[0] <= len(value[0]) <= length_bounds[1]
-        else:
-            len_bool = len(value[0]) < length_bounds
-        if gc_bool and len_bool:
-            if mean_quality(value[1]) > quality_threshold:
-                qc_seqs[key] = value
-    return qc_seqs
+    fastq_seqs = fastq_to_dict(input_fastq)
+    filtered_seqs = dict()
+    gc_lower, gc_upper = gc_bounds if isinstance(gc_bounds, tuple) else (0, gc_bounds)
+    len_min, len_max = length_bounds if isinstance(length_bounds, tuple) else (0, length_bounds)
+    for name, (seq, quality) in fastq_seqs.items():
+        if check_gc_count(seq, gc_lower, gc_upper) and check_len(seq, len_min, len_max) and check_quality(seq, quality_threshold):
+            filtered_seqs[name] = (seq, quality)
+    return save_filtered(filtered_seqs, output_fastq)
