@@ -3,7 +3,7 @@ import os
 
 def convert_multiline_fasta_to_oneline(input_fasta: str, output_fasta: str) -> str:
     """
-        Converts multiline fasta to oneline fasta.
+    Converts multiline fasta to oneline fasta.
 
     Args:
         input_fasta (str): Absolute path to multiline fasta file.
