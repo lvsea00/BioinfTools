@@ -1,3 +1,6 @@
+import os
+
+
 def check_gc_count(seq: str, gc_lower: float, gc_upper: float) -> bool:
     """
     Checks if GC percentage of the read matches given conditions
@@ -44,3 +47,26 @@ def fastq_to_dict(input_fastq: str) -> dict:
                 quality = fastq_file.readline().strip()
             fastq_seqs[seq_id] = (seq, quality)
     return fastq_seqs
+
+
+def save_filtered(filtered_seqs: dict, output_fastq: str) -> str:
+    """
+        Save filtered fastq sequences from dictionary to the file.
+
+    Args:
+        filtered_seqs (dict): Dictionary with filtered fastq sequences
+        output_fastq (str): Name of fastq file with filtered sequences.
+
+    Returns:
+        str: Program work result information.
+    """
+    if 'filtered' not in os.listdir():
+        os.mkdir('filtered')
+    filtered_path = os.path.join(os.getcwd(), 'filtered')
+    if not os.path.isfile(os.path.join(filtered_path, output_fastq)):
+        with open(os.path.join(filtered_path, output_fastq), mode='w') as fastq_file:
+            for name, (seq, quality) in filtered_seqs.items():
+                fastq_file.write(name + '\n' + seq + '\n' + '+' + name[1:] + '\n' + quality + '\n')
+        return "Sequences are filtered out"
+    else:
+        return "Check the name of the output file! Risk of overwriting!"
