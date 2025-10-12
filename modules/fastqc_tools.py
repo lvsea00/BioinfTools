@@ -22,3 +22,25 @@ def check_quality(seq: str, quality_threshold: int) -> bool:
         quality_sum += ord(char) - 33
     mean_quality = quality_sum/len(seq)
     return mean_quality > quality_threshold
+
+
+def fastq_to_dict(input_fastq: str) -> dict:
+    """
+    Converts fastq file to dictionary.
+
+    Arg:
+        input_fastq (str): Absolute path to fastq file.
+
+    Returns:
+        dict: Dictionary with fastq sequences.
+    """
+    fastq_seqs = dict()
+    with open(input_fastq) as fastq_file:
+        for line in fastq_file:
+            if line.startswith('@'):
+                seq_id = line.strip()
+                seq = fastq_file.readline().strip()
+                fastq_file.readline().strip()
+                quality = fastq_file.readline().strip()
+            fastq_seqs[seq_id] = (seq, quality)
+    return fastq_seqs
