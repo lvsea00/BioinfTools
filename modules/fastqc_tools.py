@@ -1,7 +1,9 @@
-def count_gc(seq: str) -> float:
-    """Counts GC percentage of the read"""
+def check_gc_count(seq: str, gc_lower: float, gc_upper: float) -> bool:
+    """
+    Checks if GC percentage of the read matches given conditions
+    """
     gc_content = (seq.count('G') + seq.count('C')) * 100 / len(seq)
-    return gc_content
+    return gc_lower <= gc_content <= gc_upper
 
 
 def mean_quality(seq: str) -> float:
