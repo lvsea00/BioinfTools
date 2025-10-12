@@ -30,3 +30,35 @@ def convert_multiline_fasta_to_oneline(input_fasta: str, output_fasta: str) -> s
         return "Convert multiline fasta to oneline"
     else:
         return "Check the name of the output file! Risk of overwriting!"
+
+
+def parse_blast_output(input_file: str, output_file: str) -> str:
+    """
+    Parses blast output file to extract the names of best matched sequences.
+
+    Args:
+        input_file (str): Absolute path to blast results file.
+        output_file (str): Name of the file with names of best matched sequence for each query.
+
+    Returns:
+        str: Program work result information.
+    """
+    output_file_path = os.path.join(os.getcwd(), output_file)
+    if not os.path.isfile(output_file_path):
+        with open(input_file) as input_file, open(output_file, mode='w') as output_file:
+            best_matches = []
+            for line in input_file:
+                if line.startswith('Description'):
+                    char_count = 0
+                    for char in line:
+                        char_count += 1
+                        if char == 'N':
+                            break
+                    line = input_file.readline()
+                    line = (line[:(char_count-1)]).strip()
+                    best_matches.append(line)
+            for name in sorted(best_matches):
+                output_file.write(name+'\n')
+        return "Extract the names of best matched sequences."
+    else:
+        return "Check the name of the output file! Risk of overwriting!"
