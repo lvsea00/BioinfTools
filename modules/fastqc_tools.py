@@ -31,7 +31,7 @@ def fastq_to_dict(input_fastq: str) -> dict:
     """
     Converts fastq file to dictionary.
 
-    Arg:
+    Args:
         input_fastq (str): Absolute path to fastq file.
 
     Returns:
@@ -51,7 +51,7 @@ def fastq_to_dict(input_fastq: str) -> dict:
 
 def save_filtered(filtered_seqs: dict, output_fastq: str) -> str:
     """
-        Save filtered fastq sequences from dictionary to the file.
+    Save filtered fastq sequences from dictionary to the file.
 
     Args:
         filtered_seqs (dict): Dictionary with filtered fastq sequences
