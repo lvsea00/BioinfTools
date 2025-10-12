@@ -6,6 +6,13 @@ def check_gc_count(seq: str, gc_lower: float, gc_upper: float) -> bool:
     return gc_lower <= gc_content <= gc_upper
 
 
+def check_len(seq: str, len_min: int, len_max: int) -> bool:
+    """
+    Checks if length of the read matches given conditions
+    """
+    return len_min <= len(seq) <= len_max
+
+
 def check_quality(seq: str, quality_threshold: int) -> bool:
     """
     Checks if quality of the read matches given conditions
