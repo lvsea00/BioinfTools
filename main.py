@@ -22,7 +22,7 @@ def run_dna_rna_tools(*args) -> Union[list, str]:
 
 
 def filter_fastq(input_fastq: str,
-                 output_fastq: str,
+                 output_fastq: str = 'output_fastq',
                  gc_bounds: Union[tuple, float] = (0, 100),
                  length_bounds: Union[tuple, int] = (0, 2**32),
                  quality_threshold: int = 0) -> str:
