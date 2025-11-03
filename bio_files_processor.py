@@ -1,7 +1,7 @@
 import os
 
 
-def convert_multiline_fasta_to_oneline(input_fasta: str, output_fasta: str) -> str:
+def convert_multiline_fasta_to_oneline(input_fasta: str, output_fasta: str):
     """
     Converts multiline fasta to oneline fasta.
 
@@ -10,7 +10,7 @@ def convert_multiline_fasta_to_oneline(input_fasta: str, output_fasta: str) -> s
         output_fasta (str): Name of resulted oneline fasta file.
 
     Returns:
-        str: Program work result information.
+        Program work result information.
     """
     output_fasta_path = os.path.join(os.getcwd(), output_fasta)
     if not os.path.isfile(output_fasta_path):
@@ -27,12 +27,12 @@ def convert_multiline_fasta_to_oneline(input_fasta: str, output_fasta: str) -> s
                 else:
                     seq += line
             output_fasta.write(seq+'\n')
-        return "Convert multiline fasta to oneline"
+        print("Convert multiline fasta to oneline")
     else:
-        return "Check the name of the output file! Risk of overwriting!"
+        print("Check the name of the output file! Risk of overwriting!")
 
 
-def parse_blast_output(input_file: str, output_file: str) -> str:
+def parse_blast_output(input_file: str, output_file: str):
     """
     Parses blast output file to extract the names of best matched sequences.
 
@@ -41,7 +41,7 @@ def parse_blast_output(input_file: str, output_file: str) -> str:
         output_file (str): Name of the file with names of best matched sequence for each query.
 
     Returns:
-        str: Program work result information.
+        Program work result information.
     """
     output_file_path = os.path.join(os.getcwd(), output_file)
     if not os.path.isfile(output_file_path):
@@ -59,6 +59,6 @@ def parse_blast_output(input_file: str, output_file: str) -> str:
                     best_matches.append(line)
             for name in sorted(best_matches):
                 output_file.write(name+'\n')
-        return "Extract the names of best matched sequences."
+        print("Extract the names of best matched sequences.")
     else:
-        return "Check the name of the output file! Risk of overwriting!"
+        print("Check the name of the output file! Risk of overwriting!")
