@@ -45,6 +45,6 @@ def filter_fastq(input_fastq: str,
     gc_lower, gc_upper = gc_bounds if isinstance(gc_bounds, tuple) else (0, gc_bounds)
     len_min, len_max = length_bounds if isinstance(length_bounds, tuple) else (0, length_bounds)
     for name, (seq, quality) in fastq_seqs.items():
-        if check_gc_count(seq, gc_lower, gc_upper) and check_len(seq, len_min, len_max) and check_quality(seq, quality_threshold):
+        if check_gc_count(seq, gc_lower, gc_upper) and check_len(seq, len_min, len_max) and check_quality(quality, quality_threshold):
             filtered_seqs[name] = (seq, quality)
     return save_filtered(filtered_seqs, output_fastq)
