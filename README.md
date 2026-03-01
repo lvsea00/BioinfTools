@@ -15,7 +15,7 @@ __Author: [Elizaveta Salnikova](https://github.com/lvsea00)__
 - `complement` - returns complement sequence
 - `reverse_complement` - returns reverse complement sequence
 - `transcribe` - returns RNA sequence transcribed from DNA
-- `is_start_from_met` - checks if the amino acid sequence starts with M
+- `is_starts_from_met` - checks if the amino acid sequence starts with M
   
 ### FastQC analysis
 `filter_fastq` - filters reads based on QC
