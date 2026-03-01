@@ -83,7 +83,7 @@ class AminoAcidSequence(BiologicalSequence):
                 return False
         return True
 
-    def met_start(self) -> bool:
+    def is_start_from_met(self) -> bool:
         return self.seq[0].upper() == 'M'
 
 
