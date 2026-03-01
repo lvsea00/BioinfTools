@@ -38,8 +38,8 @@ print(dna)  # DNASequence: ATGC
 print(dna.reverse())  # DNASequence: CGTA
 print(dna.complement())  # DNASequence: TACG
 print(dna.reverse_complement()) # DNASequence: GCAT
-print(rna.complement()) # DNASequence: UACG
-print(amino_acid.is_start_from_met()) # True
+print(rna.complement()) # RNASequence: UACG
+print(amino_acid.is_starts_from_met()) # True
 
 filter_fastq(input_fastq, output_fastq, gc_bounds = 60, length_bounds = (89, 100), quality_threshold = 30)
 # 'Sequences are filtered out' if everything worked correctly
