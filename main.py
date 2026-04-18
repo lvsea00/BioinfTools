@@ -4,7 +4,18 @@ from Bio import SeqIO
 from Bio.SeqUtils import gc_fraction
 from abc import ABC, abstractmethod
 import argparse
+import logging
+import sys
 
+logging.basicConfig(
+    level=logging.INFO,
+    style="{",
+    format='{asctime}  {levelname}  {message}',
+    handlers=[
+        logging.FileHandler('fastq_filtrator.log', mode='w', encoding='utf-8'),
+        logging.StreamHandler(sys.stderr)
+    ]
+)
 
 class BiologicalSequence(ABC):
     def __init__(self, seq: str) -> None:
@@ -116,19 +127,29 @@ def filter_fastq(input_fastq: str,
         os.makedirs(output_dir)
     output_path = os.path.join(output_dir, output_fastq)
 
-    with open(input_fastq, 'r') as input_file, open(output_path, mode='w') as output_file:
-        records = SeqIO.parse(input_file, "fastq")
-        for record in records:
-            seq = record.seq
-            gc_content = gc_fraction(seq) * 100
-            qualities = record.letter_annotations["phred_quality"]
-            mean_quality = sum(qualities) / len(qualities)
+    filtered_count = 0
+    total_count = 0
 
-            if (len_min <= len(seq) <= len_max) and (gc_lower <= gc_content <= gc_upper) and (mean_quality > quality_threshold):
-                SeqIO.write(record, output_file, "fastq")
+    try:
+        with open(input_fastq, 'r') as input_file, open(output_path, mode='w') as output_file:
+            records = SeqIO.parse(input_file, "fastq")
+            logging.info(f"Starting filtering: {input_fastq}")
+            for record in records:
+                total_count += 1
+                seq = record.seq
+                gc_content = gc_fraction(seq) * 100
+                qualities = record.letter_annotations["phred_quality"]
+                mean_quality = sum(qualities) / len(qualities)
 
-    print("Sequences are filtered out")
+                if (len_min <= len(seq) <= len_max) and (gc_lower <= gc_content <= gc_upper) and (mean_quality > quality_threshold):
+                    SeqIO.write(record, output_file, "fastq")
+                    filtered_count += 1
 
+        logging.info(f"Filtered {filtered_count} of {total_count} sequences from {input_fastq}")
+    
+    except Exception as e:
+        logging.error(f"Error to process {input_fastq}: {e}", exc_info=True)
+        raise
 
 def main():
     parser = argparse.ArgumentParser(
