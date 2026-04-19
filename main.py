@@ -11,11 +11,13 @@ logging.basicConfig(
     level=logging.INFO,
     style="{",
     format='{asctime}  {levelname}  {message}',
+
     handlers=[
         logging.FileHandler('fastq_filtrator.log', mode='w', encoding='utf-8'),
         logging.StreamHandler(sys.stderr)
     ]
 )
+
 
 class BiologicalSequence(ABC):
     def __init__(self, seq: str) -> None:
@@ -146,31 +148,32 @@ def filter_fastq(input_fastq: str,
                     filtered_count += 1
 
         logging.info(f"Filtered {filtered_count} of {total_count} sequences from {input_fastq}")
-    
+
     except Exception as e:
         logging.error(f"Error to process {input_fastq}: {e}", exc_info=True)
         raise
+
 
 def main():
     parser = argparse.ArgumentParser(
                     prog='Fastq Filtrator',
                     description='Filters reads based on QC',
                     epilog='')
-    
+
     parser.add_argument('input_fastq', type=str, help='Path to input FASTQ file')
 
     parser.add_argument('-o', '--output_fastq', type=str, default='output_fastq',
-                       help='Output fastq filename (default: output_fastq)')
-    
+                        help='Output fastq filename (default: output_fastq)')
+
     parser.add_argument('-gc', '--gc_bounds', type=float, nargs=2, default=[0, 100],
-                   metavar=('MIN', 'MAX'), help='GC percentage bounds (default: 0-100)')
-    
+                        metavar=('MIN', 'MAX'), help='GC percentage bounds (default: 0-100)')
+
     parser.add_argument('-len', '--length_bounds', type=int, nargs=2, default=[0, 2**32],
-                   metavar=('MIN', 'MAX'), help='Read length bounds (default: 0-2**32)')
-    
+                        metavar=('MIN', 'MAX'), help='Read length bounds (default: 0-2**32)')
+
     parser.add_argument('-q', '--quality_threshold', type=int, default=0,
-                       help='Min quality threshold (default: 0)')
-    
+                        help='Min quality threshold (default: 0)')
+
     args = parser.parse_args()
     gc_bounds = tuple(args.gc_bounds)
     length_bounds = tuple(args.length_bounds)
